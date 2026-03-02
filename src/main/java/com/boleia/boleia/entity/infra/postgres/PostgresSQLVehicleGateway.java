@@ -46,4 +46,19 @@ public class PostgresSQLVehicleGateway implements VehicleGateway {
         return new VehicleOutput(model.getId(), model.getPlate(), model.getModel(), model.getColor(), model.getBrand(), model.getYear(), model.getCreatedAt().toString(), model.getUpdatedAt().toString());
     }
 
+    @Override
+    public Result<List<VehicleOutput>, Void> findAllByDriver(String id) {
+        var model = this.jpa.findAllByDriverId(id);
+        var out = model.stream().map(this::toOutput).toList();
+        return Result.ok(out);
+    }
+
+    @Override
+    public Result<VehicleOutput, VehicleNotFoundError> findByDriverId(String id) {
+        var model = this.jpa.findByDriverId(id);
+        return model.isPresent() 
+            ? Result.ok(toOutput(model.get())) 
+            : Result.error(new VehicleNotFoundError());
+    }
+
 }

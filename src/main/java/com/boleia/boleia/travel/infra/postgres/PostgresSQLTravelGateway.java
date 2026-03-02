@@ -45,8 +45,8 @@ public class PostgresSQLTravelGateway implements TravelGateway {
     private TravelOutput toOutput(TravelModel model) {
         return new TravelOutput(
             model.getId(),
-            UUID.fromString(model.getDriver().getId()),
             UUID.fromString(model.getVehicle().getId()),
+            UUID.fromString(model.getDriver().getId()),
             model.getStartTime().toString(),
             TravelStatus.fromValue(model.getStatus()),
             model.getPrice(),

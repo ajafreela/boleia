@@ -74,7 +74,7 @@ public class TravelController {
 
     @GetMapping("/travels")
     @Operation(
-        summary = "Get all travles by id",
+        summary = "Get all travels by id",
         responses = {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "TravelOutput", implementation = TravelOutput.class))),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
@@ -87,9 +87,9 @@ public class TravelController {
 
     }
 
-    @GetMapping("/travels/{driverId}")
+    @GetMapping("/travels/driver/{driverId}")
     @Operation(
-        summary = "Get all travles by id",
+        summary = "Get all travels by driver",
         responses = {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "TravelOutput", implementation = TravelOutput.class))),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),

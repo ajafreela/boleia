@@ -163,5 +163,36 @@ public class VehicleController {
         return ResponseEntity.ok(out.unwrap());
     }
 
+    @GetMapping("/vehicle/driver/{driverId}")
+    @Operation(
+        summary = "Get vehicle by driver",
+        responses = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "VehicleOutput", implementation = VehicleOutput.class))),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+            @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+        }
+    )
+    public ResponseEntity<?> findByDriverId(@PathVariable String driverId) {
+        var out = finder.findByDriver(driverId);
+        if(out.isError() && out.unwrapError().getClass().equals(VehicleNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
+        
+        return ResponseEntity.ok(out.unwrap());
+    }
+
+
+    @GetMapping("/vehicle/driver/all/{driverId}")
+    @Operation(
+        summary = "Get all vehicles by driver",
+        responses = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "VehicleOutput", implementation = VehicleOutput.class))),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+            @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+        }
+    )
+    public ResponseEntity<?> findAllByDriver(@PathVariable String driverId) {
+        var out = finder.findAllByDriver(driverId);
+        return ResponseEntity.ok(out.unwrap());
+    }
+
     
 }
