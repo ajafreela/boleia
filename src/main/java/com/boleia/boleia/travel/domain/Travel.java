@@ -18,6 +18,7 @@ public class Travel {
     private String destiny;
     private Integer seats;
     private List<String> stops;
+    private List<UUID> passangerId;
 
     public Travel(
         UUID id,
@@ -28,7 +29,8 @@ public class Travel {
         BigDecimal price,
         String origin,
         String destiny,
-        Integer seats
+        Integer seats,
+        List<UUID> passangerId
     ) {
         this.id = id;
         this.vehicleId =  vehicleId;
@@ -39,6 +41,7 @@ public class Travel {
         this.origin = origin;
         this.destiny = destiny;
         this.seats = seats;
+        this.passangerId = passangerId;
     }
 
     public static Travel create(
@@ -60,7 +63,8 @@ public class Travel {
             price,
             origin,
             destiny,
-            seats
+            seats,
+            List.of()
         );
     }
 
@@ -84,8 +88,13 @@ public class Travel {
             price,
             origin,
             destiny,
-            seats
+            seats,
+            List.of()
         );
+    }
+
+    public void requestTravel(UUID passangerId){
+        this.passangerId.add(passangerId);
     }
 
     public void finish() {
