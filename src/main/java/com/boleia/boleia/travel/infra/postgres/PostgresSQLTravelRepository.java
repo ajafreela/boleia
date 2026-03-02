@@ -1,15 +1,18 @@
 package com.boleia.boleia.travel.infra.postgres;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
 import com.boleia.boleia.shared.error.DomainError;
 import com.boleia.boleia.shared.jpa.entity.DriverModel;
+import com.boleia.boleia.shared.jpa.entity.TravelPassangerModel;
 import com.boleia.boleia.shared.jpa.entity.DriverModelJpa;
 import com.boleia.boleia.shared.jpa.entity.TravelModel;
 import com.boleia.boleia.shared.jpa.entity.TravelModelJpa;
+import com.boleia.boleia.shared.jpa.entity.UserModelJpa;
 import com.boleia.boleia.shared.jpa.entity.VehicleModel;
 import com.boleia.boleia.shared.jpa.entity.VehicleModelJpa;
 import com.boleia.boleia.shared.types.Result;
@@ -28,6 +31,7 @@ public class PostgresSQLTravelRepository implements TravelRepository {
     private final TravelModelJpa jpa;
     private final DriverModelJpa driverJpa;
     private final VehicleModelJpa vehicleJpa;
+    private final UserModelJpa userJpa;
 
     @Override
     public Result<Void, DomainError> save(Travel travel) {
@@ -54,9 +58,20 @@ public class PostgresSQLTravelRepository implements TravelRepository {
 
         LocalDate date = LocalDate.parse(travel.getDateToTravel());
         
+
+        List<TravelPassangerModel> passengerModels = travel.getPassangers().stream().map(p -> {
+            var pm = new TravelPassangerModel();
+            pm.setTravel(model);
+            pm.setPassenger(this.userJpa.getReferenceById(p.getPassangerId().toString()));
+            pm.setStatus(p.getStatus().getValue());
+            return pm;
+        }).toList();
+
+        model.getPassengers().clear();
+        model.getPassengers().addAll(passengerModels);
+
         model.setVehicle(this.tovehicleModel(travel.getVehicleId()));
         model.setDriver(this.toDriverModel(travel.getDriverId()));
-        model.setPassangers(null);
         model.setStatus(travel.getStatus().getValue());
         model.setStartTime(date.atStartOfDay());
         model.setPrice(travel.getPrice());
@@ -66,7 +81,6 @@ public class PostgresSQLTravelRepository implements TravelRepository {
 
         return model;
     }
-
 
     private DriverModel toDriverModel(UUID id) {
         return this.driverJpa.getReferenceById(id.toString());

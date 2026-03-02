@@ -18,7 +18,7 @@ public class Travel {
     private String destiny;
     private Integer seats;
     private List<String> stops;
-    private List<UUID> passangerId;
+    private List<TravelPassanger> passangers;
 
     public Travel(
         UUID id,
@@ -30,7 +30,7 @@ public class Travel {
         String origin,
         String destiny,
         Integer seats,
-        List<UUID> passangerId
+        List<TravelPassanger> passangers
     ) {
         this.id = id;
         this.vehicleId =  vehicleId;
@@ -41,7 +41,7 @@ public class Travel {
         this.origin = origin;
         this.destiny = destiny;
         this.seats = seats;
-        this.passangerId = passangerId;
+        this.passangers = passangers;
     }
 
     public static Travel create(
@@ -94,7 +94,13 @@ public class Travel {
     }
 
     public void requestTravel(UUID passangerId){
-        this.passangerId.add(passangerId);
+        // if (this.passangers.size() >= this.seats);
+
+        this.passangers.add(TravelPassanger.create(passangerId));
+    }
+
+    public boolean isFuel(){
+        return this.seats.equals(seats);
     }
 
     public void finish() {

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.boleia.boleia.shared.error.DomainError;
 import com.boleia.boleia.shared.types.Result;
+import com.boleia.boleia.travel.domain.TravelIsFuelError;
 import com.boleia.boleia.travel.domain.TravelRepository;
 import com.boleia.boleia.travel.domain.user.UserACL;
 
@@ -22,6 +23,7 @@ public class RequestTravel {
 
         var travelOrErr = this.repository.findById(input.travelId());
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());
+        if(travelOrErr.unwrap().isFuel()) return Result.error(new TravelIsFuelError());
 
         var travel = travelOrErr.unwrap();
 

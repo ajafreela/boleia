@@ -22,7 +22,7 @@ public class CreateTravel {
     private final VehicleACL vehicleACL;
 
     @Transactional
-    public Result<Void, DomainError> exexute(CreateTravelInput input){
+    public Result<Void, DomainError> execute(CreateTravelInput input){
         var driverOrErr = this.driverACL.findById(UUID.fromString(input.driverId()));
         if(driverOrErr.isError()) return Result.error(driverOrErr.unwrapError());
 

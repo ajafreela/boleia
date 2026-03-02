@@ -7,13 +7,13 @@ import java.util.List;
 
 import com.boleia.boleia.shared.jpa.models.BaseModel;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 
 @Getter
@@ -32,12 +32,8 @@ public class TravelModel extends BaseModel {
     @JoinColumn(name = "driver_id", nullable = false)
     private DriverModel driver;
 
-    @ManyToMany
-    @JoinTable(
-        name = "travels_passangers", joinColumns = @JoinColumn(name = "travel_id"),
-        inverseJoinColumns = @JoinColumn(name = "passanger_id")
-    )
-    private List<UserModel> passangers = new ArrayList<>();
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TravelPassangerModel> passengers = new ArrayList<>();
     
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
