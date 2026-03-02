@@ -1,6 +1,6 @@
 package com.boleia.boleia.travel.infra.postgres;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,7 +56,7 @@ public class PostgresSQLTravelRepository implements TravelRepository {
     private TravelModel toModel(Travel travel){
         var model = (travel.getId() != null) ? this.jpa.findById(travel.getId().toString()).orElse(new TravelModel()) : new TravelModel();
 
-        LocalDate date = LocalDate.parse(travel.getDateToTravel());
+        LocalDateTime date = LocalDateTime.parse(travel.getDateToTravel());
         
 
         List<TravelPassangerModel> passengerModels = travel.getPassangers().stream().map(p -> {
@@ -73,7 +73,7 @@ public class PostgresSQLTravelRepository implements TravelRepository {
         model.setVehicle(this.tovehicleModel(travel.getVehicleId()));
         model.setDriver(this.toDriverModel(travel.getDriverId()));
         model.setStatus(travel.getStatus().getValue());
-        model.setStartTime(date.atStartOfDay());
+        model.setStartTime(date);
         model.setPrice(travel.getPrice());
         model.setOrigin(travel.getOrigin());
         model.setDestiny(travel.getDestiny());

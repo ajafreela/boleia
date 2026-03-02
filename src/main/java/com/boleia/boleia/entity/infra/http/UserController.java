@@ -57,7 +57,7 @@ public class UserController {
         return ResponseEntity.status(201).build();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/passanger/{id}")
     @Operation(
         summary = "Get user by id",
         responses = {

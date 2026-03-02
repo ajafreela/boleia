@@ -1,6 +1,7 @@
 package com.boleia.boleia.travel.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,7 +65,7 @@ public class Travel {
             origin,
             destiny,
             seats,
-            List.of()
+            new ArrayList<TravelPassanger>()
         );
     }
 
@@ -89,7 +90,7 @@ public class Travel {
             origin,
             destiny,
             seats,
-            List.of()
+            new ArrayList<TravelPassanger>()
         );
     }
 
@@ -100,7 +101,11 @@ public class Travel {
     }
 
     public boolean isFuel(){
-        return this.seats.equals(seats);
+        return this.seats.equals(0);
+    }
+
+    public void decreseSeats(){
+        this.seats = seats --;
     }
 
     public void finish() {

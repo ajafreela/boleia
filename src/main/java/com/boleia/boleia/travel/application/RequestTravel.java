@@ -8,6 +8,7 @@ import com.boleia.boleia.travel.domain.TravelIsFuelError;
 import com.boleia.boleia.travel.domain.TravelRepository;
 import com.boleia.boleia.travel.domain.user.UserACL;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,6 +18,7 @@ public class RequestTravel {
     private final UserACL userACL;
 
 
+    @Transactional
     public Result<Void, DomainError> execute(RequestTravelInput input){
         var userOrErr = this.userACL.findById(input.passangerId());
         if(userOrErr.isError()) return Result.error(userOrErr.unwrapError());
@@ -27,6 +29,7 @@ public class RequestTravel {
 
         var travel = travelOrErr.unwrap();
 
+        travel.decreseSeats();
         travel.requestTravel(userOrErr.unwrap().getId());
 
         var voidOrErr = this.repository.save(travel);

@@ -108,7 +108,7 @@ public class TravelController {
 
     @PostMapping("/travels/request")
     @Operation(
-        summary = "Register a new travel",
+        summary = "Request a travel",
         responses = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(name = "TravelOutput"))),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
