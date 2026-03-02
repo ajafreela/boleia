@@ -95,8 +95,6 @@ public class Travel {
     }
 
     public void requestTravel(UUID passangerId){
-        // if (this.passangers.size() >= this.seats);
-
         this.passangers.add(TravelPassanger.create(passangerId));
     }
 
@@ -123,4 +121,32 @@ public class Travel {
     public void open(){
         this.status = TravelStatus.OPEN;
     }
+
+    public void acceptPassenger(UUID passengerId) {
+        var passenger = findPassenger(passengerId);
+        
+        // Regra: Só pode aceitar se houver assentos disponíveis
+        long acceptedCount = this.passangers.stream()
+                .filter(p -> p.getStatus() == TravelPassangerStatus.ACCEPTED)
+                .count();
+
+        if (acceptedCount >= this.seats) {
+            throw new DomainError("Não há mais assentos disponíveis para esta boleia.");
+        }
+
+        passenger.setStatus(TravelPassangerStatus.ACCEPTED);
+    }
+
+    public void rejectPassenger(UUID passengerId) {
+        var passenger = findPassenger(passengerId);
+        passenger.setStatus(TravelPassangerStatus.REFUSED);
+    }
+
+    private TravelPassanger findPassenger(UUID passengerId) {
+        return this.passangers.stream()
+                .filter(p -> p.getPassangerId().equals(passengerId))
+                .findFirst()
+                .orElseThrow(() -> new DomainError("Passageiro não encontrado nesta requisição."));
+    }
+
 }
