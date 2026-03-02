@@ -1,0 +1,106 @@
+package com.boleia.boleia.travel.domain;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+import lombok.Getter;
+
+@Getter
+public class Travel {
+    private UUID id;
+    private UUID vehicleId;
+    private UUID driverId;
+    private String dateToTravel;
+    TravelStatus status;
+    private BigDecimal price;
+    private String origin;
+    private String destiny;
+    private Integer seats;
+    private List<String> stops;
+
+    public Travel(
+        UUID id,
+        UUID vehicleId,
+        UUID driverId,
+        String dateToTravel,
+        TravelStatus status,
+        BigDecimal price,
+        String origin,
+        String destiny,
+        Integer seats
+    ) {
+        this.id = id;
+        this.vehicleId =  vehicleId;
+        this.driverId = driverId;
+        this.dateToTravel = dateToTravel;
+        this.status = status;
+        this.price = price;
+        this.origin = origin;
+        this.destiny = destiny;
+        this.seats = seats;
+    }
+
+    public static Travel create(
+        UUID vehicleId,
+        UUID driverId,
+        String dateToTravel,
+        BigDecimal price,
+        String origin,
+        String destiny,
+        Integer seats
+    ) {
+
+        return new Travel(
+            UUID.randomUUID(),
+            vehicleId, 
+            driverId,
+            dateToTravel, 
+            TravelStatus.OPEN,
+            price,
+            origin,
+            destiny,
+            seats
+        );
+    }
+
+    public static Travel from(
+        UUID id,
+        UUID vehicleId,
+        UUID driverId,
+        String dateToTravel,
+        TravelStatus status,
+        BigDecimal price,
+        String origin,
+        String destiny,
+        Integer seats
+    ) {
+        return new Travel(
+            id,
+            vehicleId,
+            driverId,
+            dateToTravel,
+            status,
+            price,
+            origin,
+            destiny,
+            seats
+        );
+    }
+
+    public void finish() {
+        this.status = TravelStatus.COMPLETED;
+    }
+
+    public void fuel() {
+        this.status = TravelStatus.FUEL;
+    }
+
+    public void start() {
+        this.status = TravelStatus.STARTED;
+    }
+
+    public void open(){
+        this.status = TravelStatus.OPEN;
+    }
+}
