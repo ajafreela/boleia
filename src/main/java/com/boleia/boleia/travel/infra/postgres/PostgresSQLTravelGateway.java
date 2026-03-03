@@ -53,9 +53,11 @@ public class PostgresSQLTravelGateway implements TravelGateway {
             .toList();
 
         var pendingPassangers = model.getPassengers().stream()
-            .filter(ps -> ps.getStatus().equals(TravelPassangerStatus.ACCEPTED.getValue()))
+            .filter(ps -> ps.getStatus().equals(TravelPassangerStatus.PENDING.getValue()))
             .map(ps -> toPassengerOutput(ps.getPassenger(), ps))
             .toList();
+
+        var availableSeats = model.getSeats() - availablePassangers.size();
 
         return new TravelOutput(
             model.getId(),
@@ -67,7 +69,7 @@ public class PostgresSQLTravelGateway implements TravelGateway {
             model.getOrigin(),
             model.getDestiny(),
             model.getSeats(),
-            model.getSeats(),
+            availableSeats,
             availablePassangers,
             pendingPassangers,
             model.getCreatedAt().toString(),
