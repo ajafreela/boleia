@@ -3,10 +3,6 @@ package com.boleia.boleia.entity.domain;
 import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.boleia.boleia.domain.Exception.BadRequestException;
-import com.boleia.boleia.domain.Exception.MissingFieldException;
-
 public class Password {
     
     private static final Pattern ONLY_NUMBERS = Pattern.compile("\\d{6}");
@@ -15,11 +11,11 @@ public class Password {
     public String fromPlainText(String rawPassword) {
         
         if(rawPassword == null) {
-            throw new MissingFieldException("Password must be provided");
+            throw new IllegalArgumentException("Password must be provided");
         }
 
         if(!ONLY_NUMBERS.matcher(rawPassword).matches()) {
-            throw new BadRequestException("Password must have 6 digits");
+            throw new IllegalArgumentException("Password must have 6 digits");
         }
 
 
@@ -29,7 +25,7 @@ public class Password {
     public Boolean matches(String rawPassword, String hashedPassword) {
 
         if (rawPassword == null || hashedPassword == null){
-            throw new MissingFieldException("Both raw and hash password must be provided");
+            throw new IllegalArgumentException("Both raw and hash password must be provided");
         }
 
         return ENCODER.matches(rawPassword, hashedPassword);

@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.boleia.boleia.domain.model.Password;
 import com.boleia.boleia.entity.domain.DriverRepository;
 import com.boleia.boleia.entity.domain.NonMatchPasswordError;
+import com.boleia.boleia.entity.domain.Password;
 import com.boleia.boleia.entity.domain.PasswordIsWrongError;
 import com.boleia.boleia.shared.error.DomainError;
 import com.boleia.boleia.shared.types.Result;
