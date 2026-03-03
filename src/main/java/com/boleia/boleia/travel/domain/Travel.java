@@ -124,23 +124,17 @@ public class Travel {
     }
 
     public void acceptPassenger(UUID passengerId) {
-        var passenger = findPassenger(passengerId);
-        passenger.accept();;
+        this.passangers.stream()
+            .filter(p -> p.getPassangerId().equals(passengerId))
+            .findFirst()
+            .ifPresent(TravelPassanger::accept);
     }
 
     public void rejectPassenger(UUID passengerId) {
-        var passenger = findPassenger(passengerId);
-        passenger.refused();
-    }
-
-    private TravelPassanger findPassenger(UUID passengerId) {
-        var optionalTravel = this.passangers.stream()
+        this.passangers.stream()
             .filter(p -> p.getPassangerId().equals(passengerId))
-            .findFirst();
-
-        var travel = optionalTravel.isPresent() ? optionalTravel.get() : null;
-        
-        return TravelPassanger.from(travel.getPassangerId(), travel.getStatus());
+            .findFirst()
+            .ifPresent(TravelPassanger::refused);
     }
 
 }
