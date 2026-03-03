@@ -17,12 +17,12 @@ public class StartTravel {
     private final TravelRepository repository;
     
     @Transactional
-    public Result<Void, DomainError> exexute(UUID id){
+    public Result<Void, DomainError> execute(UUID id){
         var travelOrErr = this.repository.findById(id);
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());
 
         var travel = travelOrErr.unwrap();
-        travel.start();;
+        travel.start();
 
         var voidOrErr = this.repository.save(travel);
         if(voidOrErr.isError()) return Result.error(voidOrErr.unwrapError());

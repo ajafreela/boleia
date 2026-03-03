@@ -8,6 +8,7 @@ import com.boleia.boleia.travel.domain.TravelRepository;
 import com.boleia.boleia.travel.domain.user.UserACL;
 import com.boleia.boleia.travel.domain.user.UserNotFoundError;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -16,6 +17,7 @@ public class RefuseRequestTravel {
     private final TravelRepository repository;
     private final UserACL userACL;
 
+    @Transactional
     public Result<Void, DomainError> execute(RefuseRequestTravelInput input){
         var travelOrErr = this.repository.findById(input.travelId());
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());

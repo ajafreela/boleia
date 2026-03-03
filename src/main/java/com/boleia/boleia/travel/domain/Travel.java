@@ -99,14 +99,6 @@ public class Travel {
         this.passangers.add(TravelPassanger.create(passangerId));
     }
 
-    public boolean isFuel(){
-        return this.seats.equals(0);
-    }
-
-    // public void decreseSeats(){
-    //     this.seats--;
-    // }
-
     public void finish() {
         this.status = TravelStatus.COMPLETED;
     }
@@ -124,7 +116,6 @@ public class Travel {
     }
 
     public void acceptPassenger(UUID passengerId) {
-        // this.decreseSeats();
         this.passangers.stream()
             .filter(p -> p.getPassangerId().equals(passengerId))
             .findFirst()
