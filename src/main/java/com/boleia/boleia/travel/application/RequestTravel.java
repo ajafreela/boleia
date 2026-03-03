@@ -28,8 +28,6 @@ public class RequestTravel {
         if(travelOrErr.unwrap().isFuel()) return Result.error(new TravelIsFuelError());
 
         var travel = travelOrErr.unwrap();
-
-        travel.decreseSeats();
         travel.requestTravel(userOrErr.unwrap().getId());
 
         var voidOrErr = this.repository.save(travel);

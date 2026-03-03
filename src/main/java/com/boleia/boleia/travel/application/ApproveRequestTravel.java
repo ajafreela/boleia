@@ -31,7 +31,7 @@ public class ApproveRequestTravel {
         if(!existsPassangerInTravel) return Result.error(new UserNotFoundError());
 
         var acceptedCount = travelOrErr.unwrap().getPassangers().stream().filter(ps -> ps.getStatus().equals(TravelPassangerStatus.ACCEPTED)).count();
-        if(acceptedCount >= travelOrErr.unwrap().getSeats()) return Result.error(new TravelIsFuelError());
+        if(acceptedCount > travelOrErr.unwrap().getSeats()) return Result.error(new TravelIsFuelError());
 
         var passagerOrErr = this.userACL.findById(input.passangerId());
         if(passagerOrErr.isError()) return Result.error(passagerOrErr.unwrapError());

@@ -53,6 +53,9 @@ public class PostgresSQLTravelGateway implements TravelGateway {
             model.getOrigin(),
             model.getDestiny(),
             model.getSeats(),
+            model.getSeats(),
+            List.of(),
+            List.of(),
             model.getCreatedAt().toString(),
             model.getUpdatedAt().toString()
         );
