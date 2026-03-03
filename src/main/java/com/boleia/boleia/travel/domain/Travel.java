@@ -130,7 +130,7 @@ public class Travel {
             .ifPresent(TravelPassanger::accept);
     }
 
-    public void rejectPassenger(UUID passengerId) {
+    public void refusePassenger(UUID passengerId) {
         this.passangers.stream()
             .filter(p -> p.getPassangerId().equals(passengerId))
             .findFirst()
