@@ -185,9 +185,9 @@ public class TravelController {
 
     @PatchMapping("/travels/{id}/finish")
     @Operation(
-        summary = "Get travels by id",
+        summary = "Finish travel",
         responses = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "TravelOutput", implementation = TravelOutput.class))),
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "OutputResponse"))),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
             @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
         }
@@ -200,11 +200,11 @@ public class TravelController {
 
     }
 
-    @GetMapping("/travels/{id}/start")
+    @PatchMapping("/travels/{id}/start")
     @Operation(
-        summary = "Get travels by id",
+        summary = "Start travel",
         responses = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "TravelOutput", implementation = TravelOutput.class))),
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "OutputResponse"))),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
             @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
         }
