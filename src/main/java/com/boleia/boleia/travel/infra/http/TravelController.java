@@ -167,7 +167,7 @@ public class TravelController {
         var input = this.inputMapper.toRefuseRequestTravelInput(body);
         var out = this.refuseRequestTravel.execute(input);
 
-        if(out.isError() && out.unwrapError().getClass().equals(UserNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
+        if(out.isError() && out.unwrapError().getClass().equals(com.boleia.boleia.travel.domain.user.UserNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
         if(out.isError() && out.unwrapError().getClass().equals(TravelNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
         if(out.isError() && out.unwrapError().getClass().equals(TravelIsFuelError.class)) return HttpResponse.badRequest(out.unwrapError().getMsg());
 
