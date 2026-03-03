@@ -78,7 +78,8 @@ public class Travel {
         BigDecimal price,
         String origin,
         String destiny,
-        Integer seats
+        Integer seats,
+        List<TravelPassanger> passangers
     ) {
         return new Travel(
             id,
@@ -90,7 +91,7 @@ public class Travel {
             origin,
             destiny,
             seats,
-            new ArrayList<TravelPassanger>()
+            passangers
         );
     }
 

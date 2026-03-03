@@ -18,6 +18,8 @@ import com.boleia.boleia.shared.jpa.entity.VehicleModelJpa;
 import com.boleia.boleia.shared.types.Result;
 import com.boleia.boleia.travel.domain.Travel;
 import com.boleia.boleia.travel.domain.TravelNotFoundError;
+import com.boleia.boleia.travel.domain.TravelPassanger;
+import com.boleia.boleia.travel.domain.TravelPassangerStatus;
 import com.boleia.boleia.travel.domain.TravelRepository;
 import com.boleia.boleia.travel.domain.TravelStatus;
 
@@ -91,6 +93,8 @@ public class PostgresSQLTravelRepository implements TravelRepository {
     }
 
     private Travel toTravelFactory(TravelModel model) {
+        List<TravelPassanger> passangers = model.getPassengers().stream().map(this::toTravelPassanger).toList();
+
         return Travel.from(
             UUID.fromString(model.getId()), 
             UUID.fromString(model.getVehicle().getId()), 
@@ -100,8 +104,13 @@ public class PostgresSQLTravelRepository implements TravelRepository {
             model.getPrice(), 
             model.getOrigin(),
             model.getDestiny(), 
-            model.getSeats()
+            model.getSeats(),
+            passangers
         );
+    }
+
+    private TravelPassanger toTravelPassanger(TravelPassangerModel model) {
+        return TravelPassanger.from(UUID.fromString(model.getId()), TravelPassangerStatus.fromValue(model.getStatus()));
     }
 
 }

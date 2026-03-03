@@ -12,9 +12,11 @@ import com.boleia.boleia.travel.domain.user.UserNotFoundError;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ApproveRequestTravel {
     private final TravelRepository repository;
     private final UserACL userACL;
@@ -25,6 +27,8 @@ public class ApproveRequestTravel {
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());
 
         var passangerIntravel = travelOrErr.unwrap().getPassangers().stream().filter(ps -> ps.getPassangerId().equals(input.passangerId())).toList();
+        log.info("User quantity =====> {}" + travelOrErr.unwrap().getPassangers().size());
+        log.info("User quantity =====> {}" + passangerIntravel.size());
         if(passangerIntravel.isEmpty()) return Result.error(new UserNotFoundError());
 
         var acceptedCount = travelOrErr.unwrap().getPassangers().stream().filter(ps -> ps.getStatus().equals(TravelPassangerStatus.ACCEPTED)).count();
