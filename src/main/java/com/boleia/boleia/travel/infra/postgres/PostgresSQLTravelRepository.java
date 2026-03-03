@@ -110,7 +110,7 @@ public class PostgresSQLTravelRepository implements TravelRepository {
     }
 
     private TravelPassanger toTravelPassanger(TravelPassangerModel model) {
-        return TravelPassanger.from(UUID.fromString(model.getId()), TravelPassangerStatus.fromValue(model.getStatus()));
+        return TravelPassanger.from(UUID.fromString(model.getPassenger().getId()), TravelPassangerStatus.fromValue(model.getStatus()));
     }
 
 }

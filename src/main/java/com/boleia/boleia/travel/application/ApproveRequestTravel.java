@@ -26,19 +26,18 @@ public class ApproveRequestTravel {
         var travelOrErr = this.repository.findById(input.travelId());
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());
 
-        var passangerIntravel = travelOrErr.unwrap().getPassangers().stream().filter(ps -> ps.getPassangerId().equals(input.passangerId())).toList();
-        log.info("User quantity =====> {}" + travelOrErr.unwrap().getPassangers().size());
-        log.info("User quantity =====> {}" + passangerIntravel.size());
-        if(passangerIntravel.isEmpty()) return Result.error(new UserNotFoundError());
+        var existsPassangerInTravel = travelOrErr.unwrap().getPassangers().stream().anyMatch(ps -> ps.getPassangerId().equals(input.passangerId()));
+
+        if(!existsPassangerInTravel) return Result.error(new UserNotFoundError());
 
         var acceptedCount = travelOrErr.unwrap().getPassangers().stream().filter(ps -> ps.getStatus().equals(TravelPassangerStatus.ACCEPTED)).count();
         if(acceptedCount >= travelOrErr.unwrap().getSeats()) return Result.error(new TravelIsFuelError());
 
-        var travel = travelOrErr.unwrap();
-        travel.acceptPassenger(input.passangerId());
-
         var passagerOrErr = this.userACL.findById(input.passangerId());
         if(passagerOrErr.isError()) return Result.error(passagerOrErr.unwrapError());
+
+        var travel = travelOrErr.unwrap();
+        travel.acceptPassenger(input.passangerId());
 
         var voidOrErr = this.repository.save(travel);
         if(voidOrErr.isError()) return Result.error(voidOrErr.unwrapError());

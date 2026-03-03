@@ -104,7 +104,7 @@ public class Travel {
     }
 
     public void decreseSeats(){
-        this.seats = seats --;
+        this.seats--;
     }
 
     public void finish() {
