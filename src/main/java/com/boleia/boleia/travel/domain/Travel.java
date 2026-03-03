@@ -124,29 +124,22 @@ public class Travel {
 
     public void acceptPassenger(UUID passengerId) {
         var passenger = findPassenger(passengerId);
-        
-        // Regra: Só pode aceitar se houver assentos disponíveis
-        long acceptedCount = this.passangers.stream()
-                .filter(p -> p.getStatus() == TravelPassangerStatus.ACCEPTED)
-                .count();
-
-        if (acceptedCount >= this.seats) {
-            throw new DomainError("Não há mais assentos disponíveis para esta boleia.");
-        }
-
-        passenger.setStatus(TravelPassangerStatus.ACCEPTED);
+        passenger.accept();;
     }
 
     public void rejectPassenger(UUID passengerId) {
         var passenger = findPassenger(passengerId);
-        passenger.setStatus(TravelPassangerStatus.REFUSED);
+        passenger.refused();
     }
 
     private TravelPassanger findPassenger(UUID passengerId) {
-        return this.passangers.stream()
-                .filter(p -> p.getPassangerId().equals(passengerId))
-                .findFirst()
-                .orElseThrow(() -> new DomainError("Passageiro não encontrado nesta requisição."));
+        var optionalTravel = this.passangers.stream()
+            .filter(p -> p.getPassangerId().equals(passengerId))
+            .findFirst();
+
+        var travel = optionalTravel.isPresent() ? optionalTravel.get() : null;
+        
+        return TravelPassanger.from(travel.getPassangerId(), travel.getStatus());
     }
 
 }

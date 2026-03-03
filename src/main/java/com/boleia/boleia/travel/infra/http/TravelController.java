@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.boleia.boleia.entity.domain.DriverIsAlreadyExistsError;
 import com.boleia.boleia.entity.domain.UserNotFoundError;
 import com.boleia.boleia.shared.types.HttpResponse;
+import com.boleia.boleia.travel.application.ApproveRequestTravel;
 import com.boleia.boleia.travel.application.CreateTravel;
 import com.boleia.boleia.travel.application.RequestTravel;
 import com.boleia.boleia.travel.application.TravelFinder;
@@ -37,6 +38,8 @@ public class TravelController {
     private final CreateTravel createTravel;
     private final TravelFinder finder;
     private final RequestTravel requestTravel;
+    private final ApproveRequestTravel approveRequestTravel;
+    private final ApproveRequestTravel refuseRequestTravel;
     
     @PostMapping("/travels")
     @Operation(
@@ -116,6 +119,28 @@ public class TravelController {
         }
     )
     public ResponseEntity<?> requestTravel(@RequestBody TravelRequest body) {
+        var input = this.inputMapper.toRequestTravelInput(body);
+        var out = this.requestTravel.execute(input);
+
+        if(out.isError() && out.unwrapError().getClass().equals(UserNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
+        if(out.isError() && out.unwrapError().getClass().equals(TravelNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
+        if(out.isError() && out.unwrapError().getClass().equals(TravelIsFuelError.class)) return HttpResponse.badRequest(out.unwrapError().getMsg());
+
+        if(out.isError()) return HttpResponse.serverError(out.unwrapError().getMsg());
+
+        return ResponseEntity.status(201).build();
+    }
+
+        @PostMapping("/travels/request/approve")
+    @Operation(
+        summary = "Request a travel",
+        responses = {
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(name = "TravelOutput"))),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+            @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+        }
+    )
+    public ResponseEntity<?> approveRequestTravel(@RequestBody TravelRequest body) {
         var input = this.inputMapper.toRequestTravelInput(body);
         var out = this.requestTravel.execute(input);
 

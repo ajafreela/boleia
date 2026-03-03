@@ -36,4 +36,12 @@ public class TravelPassanger {
             status
         );
     }
+
+    public void accept(){
+        this.status = TravelPassangerStatus.ACCEPTED;
+    }
+
+    public void refused(){
+        this.status = TravelPassangerStatus.REFUSED;
+    }
 }
