@@ -14,11 +14,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ApproveRequestTravel {
+public class RefuseRequestTravel {
     private final TravelRepository repository;
     private final UserACL userACL;
 
-    public Result<Void, DomainError> execute(ApproveRequestTravelInput input){
+    public Result<Void, DomainError> execute(RefuseRequestTravelInput input){
         var travelOrErr = this.repository.findById(input.travelId());
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());
 

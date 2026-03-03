@@ -24,7 +24,7 @@ public class TravelInputMapper {
         return new ApproveRequestTravelInput(UUID.fromString(body.travelId()), UUID.fromString(body.passangerId()));
     }
 
-    public RefuseRequestTravelInput toRefusedRequestTravelInput(RefuseTravelRequest body) {
+    public RefuseRequestTravelInput toRefuseRequestTravelInput(RefuseTravelRequest body) {
         return new RefuseRequestTravelInput(UUID.fromString(body.travelId()), UUID.fromString(body.passangerId()));
     }
 
