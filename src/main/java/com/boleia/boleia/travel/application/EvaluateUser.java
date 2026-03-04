@@ -1,5 +1,7 @@
 package com.boleia.boleia.travel.application;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.boleia.boleia.shared.error.DomainError;
@@ -17,10 +19,12 @@ public class EvaluateUser {
     private final UserACL userACL;
 
     public Result<Void, DomainError> execute(EvaluateUserInput input){
-        var userOrErr = this.userACL.findById(input.userId());
+        var userOrErr = this.userACL.findById(UUID.fromString(input.userId()));
         if(userOrErr.isError()) return Result.error(userOrErr.unwrapError());
 
-        var rating = Rating.create(input.userId(), input.ratingValue(), userOrErr.unwrap().getType());
+        var user = userOrErr.unwrap();
+
+        var rating = Rating.create(user.getId(), input.ratingValue(), userOrErr.unwrap().getType());
 
         var voidOrErr = this.repository.save(rating);
         if(voidOrErr.isError()) return Result.error(voidOrErr.unwrapError());

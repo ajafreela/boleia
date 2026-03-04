@@ -30,7 +30,7 @@ public class TravelInputMapper {
     }
 
     public EvaluateUserInput toEvaluateUserInput(EvaluateUserRequest body){
-        return new EvaluateUserInput(UUID.fromString(body.userId()), body.ratingValue());
+        return new EvaluateUserInput(body.userId(), body.ratingValue());
     }
 
 }

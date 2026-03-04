@@ -228,7 +228,7 @@ public class TravelController {
             @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
         }
     )
-    public ResponseEntity<?> evaluateUser(@PathVariable EvaluateUserRequest body) {
+    public ResponseEntity<?> evaluateUser(@RequestBody EvaluateUserRequest body) {
         var input = inputMapper.toEvaluateUserInput(body);
         var out = evaluateUser.execute(input);
         if(out.isError() && out.unwrapError().getClass().equals(com.boleia.boleia.travel.domain.user.UserNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());

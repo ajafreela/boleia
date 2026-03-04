@@ -1,8 +1,6 @@
 package com.boleia.boleia.travel.application;
 
-import java.util.UUID;
-
 public record EvaluateUserInput(
-    UUID userId,
+    String userId,
     Integer ratingValue
 ) {}
