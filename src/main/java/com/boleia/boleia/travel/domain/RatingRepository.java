@@ -7,6 +7,6 @@ import com.boleia.boleia.shared.types.Result;
 import com.boleia.boleia.travel.domain.user.UserNotFoundError;
 
 public interface RatingRepository {
-    Result<Rating, DomainError> save(Rating rating);
+    Result<Void, DomainError> save(Rating rating);
     Result<Rating, UserNotFoundError> findByUserId(UUID id);
 }
