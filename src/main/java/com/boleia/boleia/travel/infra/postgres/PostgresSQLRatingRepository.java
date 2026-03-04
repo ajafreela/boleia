@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.boleia.boleia.shared.error.DomainError;
 import com.boleia.boleia.shared.jpa.entity.RatingModel;
 import com.boleia.boleia.shared.jpa.entity.RatingModelJpa;
+import com.boleia.boleia.shared.jpa.entity.UserModel;
+import com.boleia.boleia.shared.jpa.entity.UserModelJpa;
 import com.boleia.boleia.shared.types.Result;
 import com.boleia.boleia.travel.domain.Rating;
 import com.boleia.boleia.travel.domain.RatingRepository;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PostgresSQLRatingRepository implements RatingRepository {
     private final RatingModelJpa jpa;
+    private final UserModelJpa userJpa;
     
     @Override
     public Result<Void, DomainError> save(Rating rating) {
@@ -45,10 +48,12 @@ public class PostgresSQLRatingRepository implements RatingRepository {
     private RatingModel toModel(Rating rating) {
         var model = rating.getId() != null ? this.jpa.findById(rating.getId().toString()).orElse(new RatingModel()) : new RatingModel();
 
-        model.setId(null);
-        model.setRating(null);
-        model.setUser(null);
-        model.setEntityType(null);
+        var userModel = this.toUserModelFactory(rating.getUserId());
+
+        model.setId(rating.getId().toString());
+        model.setRating(rating.getRating());
+        model.setUser(userModel);
+        model.setEntityType(rating.getEntityType().getValue());
 
         return model;
     }
@@ -60,6 +65,10 @@ public class PostgresSQLRatingRepository implements RatingRepository {
             model.getRating(),
             EntityType.fromValue(model.getEntityType())
         );
+    }
+
+    private UserModel toUserModelFactory(UUID id){
+        return this.userJpa.getReferenceById(id.toString());
     }
 
 }

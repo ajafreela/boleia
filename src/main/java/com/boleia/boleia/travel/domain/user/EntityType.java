@@ -1,5 +1,8 @@
 package com.boleia.boleia.travel.domain.user;
 
+import lombok.Getter;
+
+@Getter
 public enum EntityType {
     DRIVER("DRIVER"),
     PASSANGER("PASSANGER");
