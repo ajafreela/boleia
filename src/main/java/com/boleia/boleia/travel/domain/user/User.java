@@ -7,10 +7,13 @@ import lombok.Getter;
 @Getter
 public class User {
     private UUID id;
+    private EntityType type;
 
     public User(
-        UUID id
+        UUID id,
+        EntityType type
     ) {
         this.id = id;
+        this.type = type;
     }
 }

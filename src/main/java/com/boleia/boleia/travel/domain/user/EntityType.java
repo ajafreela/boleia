@@ -1,4 +1,4 @@
-package com.boleia.boleia.entity.domain;
+package com.boleia.boleia.travel.domain.user;
 
 public enum EntityType {
     DRIVER("DRIVER"),
