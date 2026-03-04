@@ -22,6 +22,9 @@ public class FinishTravel {
         if(travelOrErr.isError()) return Result.error(travelOrErr.unwrapError());
 
         var travel = travelOrErr.unwrap();
+
+        var payment = travel.getPassangers().size() * travel.getSeats();
+
         travel.finish();
 
         var voidOrErr = this.repository.save(travel);

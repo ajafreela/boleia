@@ -1,5 +1,6 @@
 package com.boleia.boleia.travel.infra.postgres;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,8 @@ public class PostgresSQLTravelGateway implements TravelGateway {
 
         var availableSeats = model.getSeats() - availablePassangers.size();
 
+        var valuePaid = model.getPrice().multiply(new BigDecimal(availablePassangers.size()));
+
         return new TravelOutput(
             model.getId(),
             UUID.fromString(model.getVehicle().getId()),
@@ -66,6 +69,7 @@ public class PostgresSQLTravelGateway implements TravelGateway {
             model.getStartTime().toString(),
             TravelStatus.fromValue(model.getStatus()),
             model.getPrice(),
+            valuePaid,
             model.getOrigin(),
             model.getDestiny(),
             model.getSeats(),

@@ -12,6 +12,7 @@ public record TravelOutput(
     String dateToTravel,
     TravelStatus status,
     BigDecimal price,
+    BigDecimal valuePaid,
     String origin,
     String destiny,
     Integer seats,
