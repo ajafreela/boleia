@@ -1,5 +1,8 @@
 package com.boleia.boleia.shared.jpa.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.boleia.boleia.entity.domain.EntityType;
 import com.boleia.boleia.shared.jpa.models.BaseModel;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -29,6 +32,9 @@ public class UserModel extends BaseModel {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private DriverModel driver;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RatingModel> ratings = new ArrayList<>();
 
     public boolean isDriver() {
         return this.type == EntityType.DRIVER;

@@ -6,7 +6,6 @@ import com.boleia.boleia.shared.error.DomainError;
 import com.boleia.boleia.shared.types.Result;
 import com.boleia.boleia.travel.domain.Rating;
 import com.boleia.boleia.travel.domain.RatingRepository;
-import com.boleia.boleia.travel.domain.user.EntityType;
 import com.boleia.boleia.travel.domain.user.UserACL;
 
 import lombok.RequiredArgsConstructor;
@@ -21,9 +20,7 @@ public class EvaluateUser {
         var userOrErr = this.userACL.findById(input.userId());
         if(userOrErr.isError()) return Result.error(userOrErr.unwrapError());
 
-        var isDriver = userOrErr.unwrap().getType().equals(EntityType.DRIVER) ? true : false;
-
-        var rating = Rating.create(input.userId(), input.ratingValue(), isDriver);
+        var rating = Rating.create(input.userId(), input.ratingValue(), userOrErr.unwrap().getType());
 
         var voidOrErr = this.repository.save(rating);
         if(voidOrErr.isError()) return Result.error(voidOrErr.unwrapError());
