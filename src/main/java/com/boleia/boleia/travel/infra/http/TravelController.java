@@ -8,6 +8,7 @@ import com.boleia.boleia.entity.domain.UserNotFoundError;
 import com.boleia.boleia.shared.types.HttpResponse;
 import com.boleia.boleia.travel.application.ApproveRequestTravel;
 import com.boleia.boleia.travel.application.CreateTravel;
+import com.boleia.boleia.travel.application.EvaluateUser;
 import com.boleia.boleia.travel.application.FinishTravel;
 import com.boleia.boleia.travel.application.RefuseRequestTravel;
 import com.boleia.boleia.travel.application.RequestTravel;
@@ -48,6 +49,7 @@ public class TravelController {
     private final RefuseRequestTravel refuseRequestTravel;
     private final FinishTravel finishTravel;
     private final StartTravel startTravel;
+    private final EvaluateUser evaluateUser;
     
     @PostMapping("/travels")
     @Operation(
@@ -212,6 +214,26 @@ public class TravelController {
     public ResponseEntity<?> startTravel(@PathVariable String id) {
         var out = startTravel.execute(UUID.fromString(id));
         if(out.isError() && out.unwrapError().getClass().equals(TravelNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
+
+        return ResponseEntity.ok(out.unwrap());
+
+    }
+
+    @PostMapping("/travels/rating/user/evaluate")
+    @Operation(
+        summary = "User evaluate, givin stars",
+        responses = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(name = "OutputResponse"))),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+            @ApiResponse(responseCode = "404",content = @Content(mediaType = "application/json",schema = @Schema(name = "ErrorResponse",implementation = HttpResponse.class))),
+        }
+    )
+    public ResponseEntity<?> evaluateUser(@PathVariable EvaluateUserRequest body) {
+        var input = inputMapper.toEvaluateUserInput(body);
+        var out = evaluateUser.execute(input);
+        if(out.isError() && out.unwrapError().getClass().equals(com.boleia.boleia.travel.domain.user.UserNotFoundError.class)) return HttpResponse.notFound(out.unwrapError().getMsg());
+
+        if(out.isError()) return HttpResponse.serverError(out.unwrapError().getMsg());
 
         return ResponseEntity.ok(out.unwrap());
 
