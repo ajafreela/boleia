@@ -179,7 +179,7 @@ public class DriverController {
         return ResponseEntity.ok(null);
     }
 
-    @PatchMapping("/auth/driver/signin")
+    @PostMapping("/auth/driver/signin")
     @Operation(
         summary = "Sig in the system",
         responses = {
