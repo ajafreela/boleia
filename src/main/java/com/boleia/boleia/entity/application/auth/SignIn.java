@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class SignIn {
     private final UserRepository userRepository;
     private final DriverRepository driverRepository;
-    private GenerateToken generateToken;
 
     public Result<SignInOutput, DomainError> execute(SignInInput input){
         var userOrErr = this.userRepository.findByPhoneNumber(input.phoneNumber());
@@ -32,9 +31,19 @@ public class SignIn {
 
         if(!passwordMatched) return Result.error(new PasswordIsWrongError());
 
-        var tokenResponse = this.generateToken.generateToken(userOrErr.unwrap());
+        var driver = driverOrErr.unwrap();
+        var user = userOrErr.unwrap();
 
-        var out = new SignInOutput(tokenResponse.unwrap());
+        var out = new SignInOutput(
+            user.getFirstName(),
+            user.getLastName(),
+            user.getPhoneNumber(),
+            driver.getIdentificationNumber(),
+            driver.getLicenseNumber(),
+            driver.getStatus().getValue(),
+            null,
+            null
+        );
 
         return Result.ok(out);
     }
