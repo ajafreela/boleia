@@ -197,7 +197,7 @@ public class DriverController {
 
         if(out.isError() && out.unwrapError().getClass().equals(PasswordIsWrongError.class)) return HttpResponse.badRequest(out.unwrapError().getMsg());
 
-        return ResponseEntity.ok(out);
+        return ResponseEntity.ok(out.unwrap());
     }
     
 }
